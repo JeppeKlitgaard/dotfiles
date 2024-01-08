@@ -1,0 +1,48 @@
+[alias]
+	# Quick
+	b = branch
+	sw = switch
+	s = status -sb
+	p = push
+	d = diff
+	se = !git rev-list --all | xargs git grep -F
+
+	# Logging
+	l = log --graph --decorate --oneline --all
+	last = log -1 HEAD --stat
+
+	# Rewrite commits
+	reword = commit --amend
+	oops = commit --amend --no-edit
+
+	# Undo
+	uncommit = reset --soft HEAD~1
+
+	# Util
+	aliases = !git config --get-regexp ^alias\\. | sed -e s/^alias.// -e s/\\ /\\ $(printf \"\\043\")--\\>\\ / | column -t -s $(printf \"\\043\") | sort -k
+[color]
+	ui = auto
+[user]
+	email = {{ .email }}
+	name = Jeppe Klitgaard
+[core]
+	editor = code --wait
+[diff]
+	tool = vscode
+[difftool "vscode"]
+	cmd = code --wait --diff $LOCAL $REMOTE
+[tag]
+	# Sort tags as version numbers whenever applicable, so 1.10.2 is AFTER 1.2.0.
+	sort = version:refname
+[versionsort]
+	prereleaseSuffix = -pre
+	prereleaseSuffix = .pre
+	prereleaseSuffix = -beta
+	prereleaseSuffix = .beta
+	prereleaseSuffix = -rc
+	prereleaseSuffix = .rc
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true

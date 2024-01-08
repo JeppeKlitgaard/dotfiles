@@ -1,0 +1,20 @@
+{{- /* Checks if running interactively */ -}}
+{{- $interactive := stdinIsATTY -}}
+
+{{- if $interactive -}}
+{{-   writeToStdout "💡 Tip: you can re-enter your data with `chezmoi init --data=false`.\n" -}}
+{{- end -}}
+
+{{- $setupChoices := list "work" "home" -}}
+{{- $setup := promptChoiceOnce . "setup" "What setup do you wish to use?" $setupChoices -}}
+[data]
+    setup = {{ $setup | quote }}
+    name = "Jeppe Klitgaard"
+
+    {{- if eq $setup "home" }}
+    email = "hi@jeppe.science"
+
+    {{- else if eq $setup "work" }}
+    email = "jkl@nanonord.dk"
+
+    {{- end }}
