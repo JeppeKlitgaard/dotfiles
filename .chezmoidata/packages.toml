@@ -10,27 +10,24 @@ apt = [
     "curl",
     "file",
 ]
-
 brews = []
-
 casks = []
-
 [packages.linux.if_not_available]
 # These are installed if the key is not found by executing the value
 brew = { path="brew", install='/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)' }
+
+# ---
 
 [[packages]]
 [packages.linux]
 apt = [
 ]
-
 brews = [
     "pyenv",
     "poetry",
     "pipx",
     "zoxide",
 ]
-
 casks = []
 
 [packages.linux.if_not_available]
