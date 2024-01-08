@@ -1,0 +1,48 @@
+{{ if eq .chezmoi.os "linux" -}}
+#!/bin/bash
+
+{{- $numPackages := len .packages -}}
+{{ range $index, $packages := .packages }}
+echo "Doing installation loop {{ add $index 1 }}/{{ $numPackages }}"
+
+{{ if gt (len $packages.linux.apt) 0}}
+echo "Installing apt packages"
+sudo apt-get update -qq
+sudo apt-get install -qqy --ignore-missing {{ $packages.linux.apt | join " " }}
+sudo apt-get autoremove
+{{ end -}}
+
+brew bundle --no-lock --file=/dev/stdin <<EOF
+{{ range $packages.linux.brews -}}
+brew {{ . | quote }}
+{{ end -}}
+{{ range $packages.linux.casks -}}
+cask {{ . | quote }}
+{{ end -}}
+EOF
+
+echo "Installing commands that are not available"
+{{ range $key, $instruction := $packages.linux.if_not_available -}}
+
+{{ if hasKey $instruction "file" -}}
+{{ if not (stat $instruction.file ) -}}
+echo "Installing {{ $key }}..."
+{{ $instruction.install }}
+{{ end -}}
+
+{{ else if hasKey $instruction "file_home" -}}
+{{ if not (stat (joinPath $.chezmoi.homeDir $instruction.file_home )) -}}
+echo "Installing {{ $key }}..."
+{{ $instruction.install }}
+{{ end -}}
+
+{{ else if hasKey $instruction "path" }}
+{{ if not (lookPath $instruction.path) }}
+echo "Installing {{ $key }}..."
+{{ $instruction.install }}
+{{ end -}}
+
+{{ end -}}
+{{ end -}}
+{{ end -}}
+{{ end -}}

@@ -1,0 +1,38 @@
+
+# Packages are installed in order of [[packages]] sections
+[[packages]]
+[packages.linux]
+apt = [
+    "git",
+    "zsh",
+    "build-essential",
+    "procps",
+    "curl",
+    "file",
+]
+
+brews = []
+
+casks = []
+
+[packages.linux.if_not_available]
+# These are installed if the key is not found by executing the value
+brew = { path="brew", install='/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)' }
+
+[[packages]]
+[packages.linux]
+apt = [
+]
+
+brews = [
+    "pyenv",
+    "poetry",
+    "pipx",
+    "zoxide",
+]
+
+casks = []
+
+[packages.linux.if_not_available]
+zimfw = { file_home=".zim/zimfw.zsh", install="curl -fsSL https://raw.githubusercontent.com/zimfw/install/master/install.zsh | zsh" }
+rustup = { path="rustup", install="curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh" }
