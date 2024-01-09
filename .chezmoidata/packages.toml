@@ -27,6 +27,11 @@ brews = [
     "poetry",
     "pipx",
     "zoxide",
+    "starship",
+    "eza",
+    "bat",
+    "ripgrep",
+    "fzf",
 ]
 casks = []
 
